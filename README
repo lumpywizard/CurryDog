@@ -1,0 +1,3 @@
+CurryDog is going to be a 2d game engine, written in Haskell, utilizing SDL.
+
+All files committed by adorablepuppy were run through the Glasgow Haskell Compiler from the Haskell Platform package.
