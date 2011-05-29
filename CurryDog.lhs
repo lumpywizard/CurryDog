@@ -11,16 +11,18 @@ TODO CurryDog.lhs:
 > import CurryDog.Input as CurryDog
 > import Graphics.UI.SDL as SDL
 
+> runGame :: IO ()
 > runGame = do SDL.init [SDL.InitEverything]
 >              SDL.setVideoMode 1280 720 32 [SWSurface]
->              SDL.setCaption "Game" "Game"
->              --gameLoop False []
+>              gameLoop NodeList "GameState" [ BoolLeaf   "quit_game"    False
+>                                            , NodeList   "pressed_keys" []
+>                                            , StringLeaf "Caption"      "Game"
+>                                            ]
 >              SDL.quit
->           {-where
->              gameLoop quitFired pressed_keys = SDL.waitEventBlocking >>= do
->                                                                      let keys = (\ event ->  event )
->                                                                      if quitFired then
->                                                                         return
->                                                                      else
->                                                                         gameLoop False keys
->                                                                         return -}
+>           where
+>              gameLoop gamestate = SDL.waitEventBlocking >>= do keys <- checkKeys --This is broken.
+>                                                                if (leafBool $ head $ namedProperties "quit_game" $ nodeList gamestate) then
+>                                                                   return
+>                                                                else
+>                                                                   gameLoop gamestate
+>                                                                   return
