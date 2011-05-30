@@ -1,9 +1,6 @@
-This file is a skeleton.
-
 TODO CurryDog.lhs:
-1. Fix gameLoop.
-2. gameLoop function injection, so CurryDog user can easily insert their own function into the game loop.
-3. Timer.
+1. gameLoop function injector. Needs to use the gamestate nodelist base with a FunctionLeaf called userfunction.
+2. Timer.
 
 > module CurryDog
 > where
@@ -11,18 +8,9 @@ TODO CurryDog.lhs:
 > import CurryDog.Input as CurryDog
 > import Graphics.UI.SDL as SDL
 
-> runGame :: IO ()
-> runGame = do SDL.init [SDL.InitEverything]
->              SDL.setVideoMode 1280 720 32 [SWSurface]
->              gameLoop NodeList "GameState" [ BoolLeaf   "quit_game"    False
->                                            , NodeList   "pressed_keys" []
->                                            , StringLeaf "Caption"      "Game"
->                                            ]
->              SDL.quit
->           where
->              gameLoop gamestate = SDL.waitEventBlocking >>= do keys <- checkKeys --This is broken.
->                                                                if (leafBool $ head $ namedProperties "quit_game" $ nodeList gamestate) then
->                                                                   return
->                                                                else
->                                                                   gameLoop gamestate
->                                                                   return
+> runGame :: Maybe PropertyTree -> IO ()
+> runGame gamestate = do SDL.init [SDL.InitEverything]
+>                        SDL.setVideoMode 1280 720 32 [SWSurface]
+>                        SDL.quit
+>                        where
+>                            gameLoop gamestate = SDL.waitEventBlocking >>= (\ event -> return $ checkEvent event gamestate )

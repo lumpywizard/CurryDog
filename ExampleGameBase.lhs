@@ -5,10 +5,15 @@ TODO ExampleGameBase.lhs:
 
 > module Main
 > where
-> import qualified CurryDog as CurryDog
-> import qualified CurryDog.Data as CurryDog
-> import qualified CurryDog.Input as CurryDog
-> import qualified CurryDog.Physics2d as CurryDog
+> import CurryDog as CurryDog
+> import CurryDog.Data as CurryDog
+> import CurryDog.Input as CurryDog
+> import CurryDog.Physics2d as CurryDog
+
+> myFunc :: PropertyTree -> PropertyTree
+> myFunc x = x
 
 > main :: IO ()
-> main = CurryDog.runGame
+> main = runGame (Just $ NodeList "gamestate" [ BoolLeaf "quitgame" False
+>                                             , CurryDog.NodeList "pressedkeys" []
+>                                             , CurryDog.FunctionLeaf "userfunction" myFunc ])

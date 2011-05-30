@@ -2,8 +2,9 @@ This file will house all of the functions to do with input that will be run thro
 
 > module CurryDog.Input
 > where
+> import CurryDog.Data as CurryDog
 > import Graphics.UI.SDL as SDL
 
-> checkEvent :: [SDLKey] -> Event -> [SDLKey]
-> checkEvent pressed_keys ( KeyDown ( Keysym key _ _ ) ) = key:pressed_keys
-> checkEvent pressed_keys ( KeyUp   ( Keysym key _ _ ) ) = filter (/=key) pressed_keys
+> checkEvent :: Event -> PropertyTree -> PropertyTree
+> checkEvent ( KeyDown ( Keysym key _ _ ) ) gamestate = insertIntoNode ["pressedkeys"] (KeyLeaf (show key) key) gamestate
+> checkEvent ( KeyUp   ( Keysym key _ _ ) ) gamestate = removeFromNode ["pressedkeys"] (show key) gamestate
